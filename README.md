@@ -17,7 +17,11 @@ sh main.sh $nameOfDump
 
 that'll output a directory called `pages`; move the *contents* of that into the `pages` directory of the vue site to update it.
 
-if you have to change 'GNDs' to 'UN Sustainable Development Goals' you're good.
+run `src/sus.sed` on the pages if you're generating for the UN Sustainable Development Goals site.
+
+## STEP THREE: refresh the site
+
+move the pages into the repo and push it to github/lab. zeit will hook into that and regenerate the website.
 
 ## OTHER STUFF
 repos:
