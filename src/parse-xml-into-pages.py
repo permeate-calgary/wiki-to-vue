@@ -78,7 +78,7 @@ for child in root:
         siteinfo(child)
     elif child.tag == '{http://www.mediawiki.org/xml/export-0.10/}page':
         page = paginate(child)
-        open(f"{OUT_DIR}/{page.title.replace(' ', '-')}.mediawiki", 'w').write(page.content.content)
+        open(f"{OUT_DIR}/{page.title.replace(' ', '-')}.mediawiki", 'w', encoding="utf-8").write(page.content.content)
     else:
         print(child.tag)
         raise Error(f"is the {{}} encloded string {base_string}")
