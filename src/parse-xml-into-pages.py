@@ -13,7 +13,7 @@ if not IN_FILE:
 
 tree = ET.parse(IN_FILE)
 root = tree.getroot()
-base_string = '{http://www.mediawiki.org/xml/export-0.10/}'
+base_string = '{http://www.mediawiki.org/xml/export-0.11/}'
 
 class Rev:
     timestamp = ''
@@ -45,9 +45,9 @@ def paginate(tree):
     def revisionate(tree):
         rev = Rev()
         for child in tree:
-            if child.tag == '{http://www.mediawiki.org/xml/export-0.10/}text':
+            if child.tag == '{http://www.mediawiki.org/xml/export-0.11/}text':
                 rev.content = child.text
-            elif child.tag == '{http://www.mediawiki.org/xml/export-0.10/}timestamp':
+            elif child.tag == '{http://www.mediawiki.org/xml/export-0.11/}timestamp':
                 rev.timestamp = child.text
 
             if rev.content and rev.timestamp:
@@ -56,15 +56,15 @@ def paginate(tree):
     page = Page()
 
     for child in tree:
-        if child.tag == '{http://www.mediawiki.org/xml/export-0.10/}title':
+        if child.tag == '{http://www.mediawiki.org/xml/export-0.11/}title':
             page.title = child.text
-        elif child.tag == '{http://www.mediawiki.org/xml/export-0.10/}ns':
+        elif child.tag == '{http://www.mediawiki.org/xml/export-0.11/}ns':
             #don't know what this is; don't care
             continue
-        elif child.tag == '{http://www.mediawiki.org/xml/export-0.10/}id':
+        elif child.tag == '{http://www.mediawiki.org/xml/export-0.11/}id':
             #don't know what this is; don't care
             continue
-        elif child.tag == '{http://www.mediawiki.org/xml/export-0.10/}revision':
+        elif child.tag == '{http://www.mediawiki.org/xml/export-0.11/}revision':
             content_maybe = revisionate(child)
             if content_maybe.content and newer_p(content_maybe.timestamp, page.content.timestamp):
                 page.content = content_maybe
@@ -74,11 +74,11 @@ def paginate(tree):
     return page
 
 for child in root:
-    if child.tag == '{http://www.mediawiki.org/xml/export-0.10/}siteinfo':
+    if child.tag == '{http://www.mediawiki.org/xml/export-0.11/}siteinfo':
         siteinfo(child)
-    elif child.tag == '{http://www.mediawiki.org/xml/export-0.10/}page':
+    elif child.tag == '{http://www.mediawiki.org/xml/export-0.11/}page':
         page = paginate(child)
         open(f"{OUT_DIR}/{page.title.replace(' ', '-')}.mediawiki", 'w', encoding="utf-8").write(page.content.content)
     else:
         print(child.tag)
-        raise Error(f"is the {{}} encloded string {base_string}")
+        raise Exception(f"is the {{}} encloded string {base_string}")
